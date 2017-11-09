@@ -1,6 +1,4 @@
-# gowebbench
-webbench using golang.
-Usage of gowebbench:
+Usage of gowebbench.exe:
   -c int
         clients 并发数
   -cfile string
@@ -26,4 +24,4 @@ ebh_auth=aaaaa|ebh_auth=bbb
         bench url 需要测试的URL地址，当 -url为空时，可以在命令最后面输入url
 
 命令行示例：
-./gowebbench -t 10 -c 200 -f e:/1.txt -d="a=b&c=1" -cfile="e:/c.txt" http://www.baidu.com/
+gowebbench.exe -t 10 -c 200 -f e:/1.txt -d="a=b&c=1" -cfile="e:/c.txt" http://ss.ebh.net/bench.html 
