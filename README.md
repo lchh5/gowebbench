@@ -2,28 +2,38 @@
 webbench using golang.
 Usage of gowebbench:
   -c int
-        clients ²¢·¢Êý
+        clients å¹¶å‘æ•°
+	
   -cfile string
         cookies save file path
-	cookieÎÄ¼þµÄ±£´æÂ·¾¶£¬ÄÚÈÝÖ§³Ö a=1&b=2|c=3&d=4 ¸ñÊ½£¬µ±Ï£ÍûÖ§³Ö¶à×écookie½øÐÐ´¦ÀíÊ±£¬¿ÉÒÔÓÃ|½øÐÐ¸ñÊ½£¬ÈçÏ£ÍûÖ§³ÖÄ£Äâ¶à¸öÓÃ»§£¬Ôò¿ÉÒÔÓÃ
-ebh_auth=aaaaa|ebh_auth=bbb
+	cookieæ–‡ä»¶çš„ä¿å­˜è·¯å¾„ï¼Œå†…å®¹æ”¯æŒ a=1&b=2|c=3&d=4 æ ¼å¼ï¼Œå½“å¸Œæœ›æ”¯æŒå¤šç»„cookieè¿›è¡Œå¤„ç†æ—¶ï¼Œå¯ä»¥ç”¨|è¿›è¡Œæ ¼å¼ï¼Œå¦‚å¸Œæœ›æ”¯æŒæ¨¡æ‹Ÿå¤šä¸ªç”¨æˆ·ï¼Œåˆ™å¯ä»¥ç”¨
+cookie1=aaaaa|cookie2=bbb
+
   -cookies string
-        Ä£ÄâµÄcookiesÖµ£¬¿ÉÒÔÖ±½ÓÃüÁîÐÐ·½Ê½£¬¶à×écookieÒÔ|¸ô¿ª
+        æ¨¡æ‹Ÿçš„cookieså€¼ï¼Œå¯ä»¥ç›´æŽ¥å‘½ä»¤è¡Œæ–¹å¼ï¼Œå¤šç»„cookieä»¥|éš”å¼€
+	
   -d string
-        Ìá½»µÄpost²ÎÊýºÍÖµ£¬¸ñÊ½Îª a=b&c=d ÕâÑùµÄ¸ñÊ½
+        æäº¤çš„postå‚æ•°å’Œå€¼ï¼Œæ ¼å¼ä¸º a=b&c=d è¿™æ ·çš„æ ¼å¼
+	
   -dfile string
-        Ö§³Ö½«post²ÎÊý±£´æµ½ÎÄ¼þÌá½»£¬´ËÊ±´«Èë±£´æµÄÎÄ¼þÂ·¾¶¼´¿É
+        æ”¯æŒå°†postå‚æ•°ä¿å­˜åˆ°æ–‡ä»¶æäº¤ï¼Œæ­¤æ—¶ä¼ å…¥ä¿å­˜çš„æ–‡ä»¶è·¯å¾„å³å¯
+	
   -f string
-        ´Ë²ÎÊýÓÃÓÚÉÏ´«ÎÄ¼þ£¬ÊäÈëÐèÒªÉÏ´«µÄÎÄ¼þÂ·¾¶¼´¿É
+        æ­¤å‚æ•°ç”¨äºŽä¸Šä¼ æ–‡ä»¶ï¼Œè¾“å…¥éœ€è¦ä¸Šä¼ çš„æ–‡ä»¶è·¯å¾„å³å¯
+	
   -fname string
-        ºÍ-f×éºÏ£¬Èç¹ûÐèÒªÉÏ´«µÄÎÄ¼þÒÔÌØ¶¨×Ö¶ÎÊ±¿ÉÒÔÖ¸¶¨
+        å’Œ-fç»„åˆï¼Œå¦‚æžœéœ€è¦ä¸Šä¼ çš„æ–‡ä»¶ä»¥ç‰¹å®šå­—æ®µæ—¶å¯ä»¥æŒ‡å®š
+	
   -m string
-        Ìá½»µÄ·½·¨£¬Ä¬ÈÏGET£¬Ö§³ÖGETºÍPOST£¬µ± ²ÎÊý -d -f -dfileÓÐÖµÊ±£¬×Ô¶¯ÇÐ»»µ½POST£¬´ó²¿·ÖÇé¿öÏÂ´ËÖµ¿ÉÒÔÁô¿Õ
+        æäº¤çš„æ–¹æ³•ï¼Œé»˜è®¤GETï¼Œæ”¯æŒGETå’ŒPOSTï¼Œå½“ å‚æ•° -d -f -dfileæœ‰å€¼æ—¶ï¼Œè‡ªåŠ¨åˆ‡æ¢åˆ°POSTï¼Œå¤§éƒ¨åˆ†æƒ…å†µä¸‹æ­¤å€¼å¯ä»¥ç•™ç©º
+	
   -t int
         bench time,if arg n set,it will be igorn
-	²âÊÔµÄÊ±¼ä£¬ÒÔÃëÎªµ¥Î»
+	æµ‹è¯•çš„æ—¶é—´ï¼Œä»¥ç§’ä¸ºå•ä½
+	
   -url string
-        bench url ÐèÒª²âÊÔµÄURLµØÖ·£¬µ± -urlÎª¿ÕÊ±£¬¿ÉÒÔÔÚÃüÁî×îºóÃæÊäÈëurl
+        bench url éœ€è¦æµ‹è¯•çš„URLåœ°å€ï¼Œå½“ -urlä¸ºç©ºæ—¶ï¼Œå¯ä»¥åœ¨å‘½ä»¤æœ€åŽé¢è¾“å…¥url
+	
 
-ÃüÁîÐÐÊ¾Àý£º
+å‘½ä»¤è¡Œç¤ºä¾‹ï¼š
 ./gowebbench -t 10 -c 200 -f e:/1.txt -d="a=b&c=1" -cfile="e:/c.txt" http://www.baidu.com/
