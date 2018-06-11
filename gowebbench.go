@@ -7,6 +7,7 @@ import (
 	"io"
 	"io/ioutil"
 	"mime/multipart"
+	"net"
 	"net/http"
 	"os"
 	"runtime"
@@ -14,7 +15,8 @@ import (
 	"sync"
 	"time"
 )
-import "github.com/pkg/profile"
+
+// import "github.com/pkg/profile"
 
 type bench struct {
 	allrequests int
@@ -72,7 +74,7 @@ var mux sync.Mutex
 var benchs = bench{allrequests: 0, allbytes: 0, successed: 0, failed: 0}
 
 func main() {
-	defer profile.Start(profile.CPUProfile).Stop()
+	// defer profile.Start(profile.CPUProfile).Stop()
 
 	if !initArgs() {
 		return
@@ -182,7 +184,23 @@ func doBench(index int) {
 	// fmt.Println(2)
 	// fmt.Println("dobench", index)
 	// client := &http.Client{Timeout: 15 * time.Second}
-	client := &http.Client{}
+	var trans http.RoundTripper = &http.Transport{
+		Proxy: http.ProxyFromEnvironment,
+		DialContext: (&net.Dialer{
+			Timeout:   30 * time.Second,
+			KeepAlive: 30 * time.Second,
+			DualStack: true,
+		}).DialContext,
+		MaxIdleConns:          100,
+		MaxIdleConnsPerHost:   100,
+		IdleConnTimeout:       90 * time.Second,
+		TLSHandshakeTimeout:   10 * time.Second,
+		ExpectContinueTimeout: 1 * time.Second,
+	}
+
+	client := &http.Client{
+		Transport: trans,
+	}
 	// fmt.Println(req)
 	// fmt.Println(3)
 	// ccc := 0
@@ -317,8 +335,9 @@ func initArgs() bool {
  */
 func buildRequest(burl, bmethod, bpostdata, bpostfile, bpostfilename, bcookie string) (*http.Request, error) {
 	contentType := "text/html;charset=UTF-8"
-	body := &bytes.Buffer{}
-	if bpostdata != "" || bpostfile != "" {
+	var body *bytes.Buffer
+	if bpostdata != "" && bpostfile != "" {
+		body = &bytes.Buffer{}
 		// fmt.Println(bpostdata)
 		multiwriter := multipart.NewWriter(body)
 
@@ -352,6 +371,12 @@ func buildRequest(burl, bmethod, bpostdata, bpostfile, bpostfilename, bcookie st
 		}
 		contentType = multiwriter.FormDataContentType()
 		multiwriter.Close()
+	} else if postdata != "" {
+		body = bytes.NewBufferString(postdata)
+		contentType = "application/x-www-form-urlencoded"
+	}
+	if body == nil {
+		body = &bytes.Buffer{}
 	}
 	req, err := http.NewRequest(bmethod, burl, body) //此方法必须传POST或者GET,如果为GET 则其他postfile等数据不会提交
 	if err != nil {
