@@ -57,6 +57,9 @@ var postfilename string
 //提交的cookies组合，多组cookie用|分开
 var cookies string
 
+//提交的header头部组合，多个header用|分开
+var headers string
+
 //cookie保存的文件路径，优先级高于cookies,格式同cookies
 var cookiefile string
 
@@ -64,7 +67,7 @@ var cookiefile string
 var url string
 
 //当前版本号
-const ver = "0.1"
+const ver = "0.2"
 
 var requestlist = make(map[int](*http.Request))
 var mybench = make(chan benchitem)
@@ -85,7 +88,7 @@ func main() {
 
 	cookielist := strings.Split(cookies, "|")
 	for cindex, thecookie := range cookielist {
-		req, err := buildRequest(url, method, postdata, postfile, postfilename, thecookie)
+		req, err := buildRequest(url, method, postdata, postfile, postfilename, thecookie, headers)
 		if err != nil {
 			continue
 		}
@@ -219,7 +222,7 @@ func doBench(index int) {
 		// fmt.Println("before ccc:", ccc)
 		if postfile != "" || postdata != "" { //如果有文件上传，则每次执行协程都要重新生成request
 			var err error
-			req, err = buildRequest(url, method, postdata, postfile, postfilename, thecookie)
+			req, err = buildRequest(url, method, postdata, postfile, postfilename, thecookie, headers)
 			if err != nil {
 				ok = false
 				fmt.Println("build request err")
@@ -263,6 +266,7 @@ func initArgs() bool {
 	flag.IntVar(&alltimes, "t", 0, "bench time,if arg n set,it will be igorn")
 	// flag.IntVar(&allrequests, "n", 0, "number request to bench")
 	flag.IntVar(&clients, "c", 0, "clients")
+	flag.StringVar(&headers, "h", "", "more headers split by | ")
 	flag.StringVar(&postdata, "d", "", "post filed and value")
 	flag.StringVar(&postdatafile, "dfile", "", "post data file path")
 	flag.StringVar(&postfile, "f", "", "post filedata path")
@@ -333,7 +337,7 @@ func initArgs() bool {
 /*
 * 生成请求对象
  */
-func buildRequest(burl, bmethod, bpostdata, bpostfile, bpostfilename, bcookie string) (*http.Request, error) {
+func buildRequest(burl, bmethod, bpostdata, bpostfile, bpostfilename, bcookie string, bheader string) (*http.Request, error) {
 	contentType := "text/html;charset=UTF-8"
 	var body *bytes.Buffer
 	if bpostdata != "" && bpostfile != "" {
@@ -402,5 +406,19 @@ func buildRequest(burl, bmethod, bpostdata, bpostfile, bpostfilename, bcookie st
 		}
 	}
 	req.Header.Set("Content-Type", contentType)
+	if bheader != "" { //处理头部header
+		headerfields := strings.Split(bheader, "&")
+		for _, headerfield := range headerfields {
+			cfieldvalue := strings.Split(headerfield, "=")
+			if len(cfieldvalue) < 2 {
+				continue
+			}
+			headername := cfieldvalue[0]
+			headername = strings.Trim(headername, " ")
+			headervalue := strings.Join(cfieldvalue[1:], "=")
+			headervalue = strings.Trim(headervalue, " ")
+			req.Header.Add(headername, headervalue)
+		}
+	}
 	return req, nil
 }

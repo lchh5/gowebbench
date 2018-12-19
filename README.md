@@ -4,7 +4,7 @@
 simple webbench using golang.
 
 
-Usage of gowebbench:
+##Usage of gowebbench:
 
   -c int
 
@@ -33,6 +33,10 @@ cookie1=aaaaa|cookie2=bbb
   -f string
 
         此参数用于上传文件，输入需要上传的文件路径即可
+
+  -h string
+
+        提交header头请求，格式为 a=b&c=d 这样的格式
 	
   -fname string
 
